@@ -1,0 +1,16 @@
+{
+  "name": "stream-example",
+  "version": "1.0.0",
+  "description": "Stream example in nodejs",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./",
+    "build": "tsc -p ."
+  },
+  "author": "Breno Rodrigo Fachini",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.11.17"
+  }
+}
