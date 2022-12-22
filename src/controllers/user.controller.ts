@@ -1,10 +1,13 @@
 import { NextFunction, Router, Request, Response } from "express";
+import { businessLog, routeStepLog } from "../services/logger.service";
 import { listUsers } from "../services/user.service";
 
 const userController = Router();
 
 userController.get('/users', async (req: Request, res: Response, next: NextFunction) => {
     const users = await listUsers();
+    routeStepLog(req, "calling user servie to list users");
+    businessLog(req, "logging business example")
     if(users.length < 1) {
         res.status(422).send(users);
     }
