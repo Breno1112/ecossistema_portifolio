@@ -36,3 +36,7 @@ export async function postgresListUsers(): Promise<UserDTO[]> {
     }
     return response;
 }
+
+export function isConnected(): boolean {
+    return pool != null;
+}
