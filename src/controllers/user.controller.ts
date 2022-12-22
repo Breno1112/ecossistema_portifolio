@@ -5,14 +5,15 @@ import { listUsers } from "../services/user.service";
 const userController = Router();
 
 userController.get('/users', async (req: Request, res: Response, next: NextFunction) => {
+    businessLog(req, "calling user servie to list users");
     const users = await listUsers();
-    routeStepLog(req, "calling user servie to list users");
-    businessLog(req, "logging business example")
+    routeStepLog(req, {listUsersResponse: users});
     if(users.length < 1) {
-        res.status(422).send(users);
+        businessLog(req, "empty user list");
+    } else {
+        businessLog(req, "non-empty user list");
     }
-    res.setHeader("testebreno", "bla");
-    res.status(200).send([]);
+    res.status(200).send(users);
 });
 
 userController.get('/users/:uuid', async (req: Request, res: Response, next: NextFunction) => {
