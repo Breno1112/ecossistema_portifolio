@@ -1,5 +1,5 @@
-import { CreateUserResponse, UserDTO } from "../domain/dtos/user/user.domain";
-import { postgresCreateUser, postgresListUsers } from "../drivers/postgres.driver";
+import { CreateUserResponse, DeleteUserResponse, UserDTO } from "../domain/dtos/user/user.domain";
+import { postgresCreateUser, postgresDeleteUserById, postgresGetUserById, postgresListUsers } from "../drivers/postgres.driver";
 import { Request } from 'express';
 import { businessLog, routeStepLog } from "./logger.service";
 
@@ -32,5 +32,33 @@ export async function createUser(req: Request, user: UserDTO): Promise<CreateUse
         result.success = true;
         result.error = undefined;
     }
+    return result;
+}
+
+export async function deleteUser(req: Request, userId: string): Promise<DeleteUserResponse> {
+    const result: DeleteUserResponse = {
+        userId: userId,
+        deleted: false,
+        error: undefined
+    };
+    routeStepLog(req, `getting user with id ${userId} from database`);
+    const user = await postgresGetUserById(userId);
+    routeStepLog(req, `got user ${user} from database with id ${userId}`);
+        if(user == null) {
+            result.deleted = false;
+            result.error = `User with id ${userId} not found`;
+            businessLog(req, result.error);
+        } else {
+            routeStepLog(req, `trying to delete user ${userId} from databse`);
+            const deleted = await postgresDeleteUserById(userId);
+            routeStepLog(req, `user ${userId} deleted: ${deleted}`);
+            result.deleted = deleted;
+            if(deleted) {
+                result.error = undefined;
+            } else {
+                result.error = `Could not delete user with id ${userId}`;
+                businessLog(req, result.error);
+            }
+        }
     return result;
 }

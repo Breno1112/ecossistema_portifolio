@@ -15,3 +15,9 @@ export type CreateUserResponse = {
     success: boolean;
     error: string | undefined;
 }
+
+export type DeleteUserResponse = {
+    userId: string,
+    deleted: boolean,
+    error: string | undefined
+}

@@ -72,3 +72,39 @@ export async function postgresCreateUser(user: UserDTO): Promise<CreateUserRespo
     }
     return response;
 }
+
+export async function postgresGetUserById(userId: string): Promise<UserDTO | null> {
+    try {
+        await checkConnection();
+        const response = await pool!.query("SELECT * FROM USUARIO WHERE ID = $1", [userId]);
+        if(response.rowCount < 1) {
+            return null;
+        }
+        const responseData = response.rows[0];
+        const result: UserDTO = {
+            username: "",
+            firstname: "",
+            surename: "",
+            age: 0
+        };
+        result.username = responseData.username;
+        result.firstname = responseData.name;
+        result.surename = responseData.last_name;
+        result.age = responseData.age;
+        return result;
+    } catch (error) {
+        return null;
+    }
+}
+
+export async function postgresDeleteUserById(userId: string): Promise<boolean> {
+    try {
+        const queryText = "delete from usuario where id = $1";
+        const queryParams = [userId];
+        await checkConnection();
+        await pool!.query(queryText, queryParams);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}

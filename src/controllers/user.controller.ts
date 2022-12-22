@@ -1,7 +1,7 @@
 import { NextFunction, Router, Request, Response } from "express";
-import { UserDTO } from "../domain/dtos/user/user.domain";
+import { DeleteUserResponse, UserDTO } from "../domain/dtos/user/user.domain";
 import { businessLog, routeStepLog } from "../services/logger.service";
-import { createUser, listUsers } from "../services/user.service";
+import { createUser, deleteUser, listUsers } from "../services/user.service";
 
 const userController = Router();
 
@@ -36,9 +36,39 @@ userController.post('/users',  async (req: Request, res: Response, next: NextFun
     const response = await createUser(req, body);
     if(response.error != undefined) {
         res.status(422).send(response);
+        businessLog(req, `failed to create user ${body.username}`);
     } else {
         res.status(201).send(response);
+        businessLog(req, `user ${body.username} created successfully`);
     }
+});
+
+userController.delete('/users/:userId', async (req: Request, res: Response, next: NextFunction) => {
+    let userId: string;
+    try {
+        userId = req.params.userId;
+        businessLog(req, `got user id as ${userId}`);
+    } catch (error) {
+        businessLog(req, 'failed to get user id');
+        routeStepLog(req, {route_step_error: error});
+        res.status(400).send({message: "Bad request"});
+        return;
+    }
+    if(userId != null) {
+        const deleteUserResponse: DeleteUserResponse = await deleteUser(req, userId);
+        if(!deleteUserResponse.deleted) {
+            res.status(500).send(deleteUserResponse);
+            businessLog(req, {business_error: {error: deleteUserResponse.error}});
+        } else {
+            res.status(200).send(deleteUserResponse);
+            businessLog(req, `deleted user ${userId}`);
+        }
+    } else {
+        businessLog(req, 'failed to get user id');
+        res.status(400).send({message: "Bad request"});
+        return;
+    }
+
 });
 
 export default userController;
