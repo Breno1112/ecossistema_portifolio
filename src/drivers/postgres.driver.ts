@@ -1,5 +1,5 @@
-import { Pool, Client } from "pg";
-import { UserDTO } from "../domain/dtos/user.dto";
+import { Pool } from "pg";
+import { UserDTO, UserListResponse } from "../domain/dtos/user/user.domain";
 
 let pool: Pool | null = null;
 
@@ -10,13 +10,14 @@ async function initPostgressDriver(): Promise<void> {
         database: 'test',
         port: 2201,
         password: 'mysecretpasword',
-        connectionTimeoutMillis: 5000
+        connectionTimeoutMillis: 300,
+        statement_timeout: 300
     });
 }
 
 
 
-export async function postgresListUsers(): Promise<UserDTO[]> {
+export async function postgresListUsers(): Promise<UserListResponse> {
     const response: UserDTO[] = [];
     try {
         if(pool == null) {
@@ -31,10 +32,18 @@ export async function postgresListUsers(): Promise<UserDTO[]> {
                 age: value.age
             });
         });
+        return {
+            data: response,
+            business_error: null,
+            route_step_error: null
+        };
     } catch(error) {
-        console.log(error);
+        return {
+            data: null,
+            business_error: "erro ao listar usuários",
+            route_step_error: error
+        }
     }
-    return response;
 }
 
 export function isConnected(): boolean {

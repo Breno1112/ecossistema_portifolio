@@ -6,7 +6,7 @@ const userController = Router();
 
 userController.get('/users', async (req: Request, res: Response, next: NextFunction) => {
     businessLog(req, "calling user servie to list users");
-    const users = await listUsers();
+    const users = await listUsers(req);
     routeStepLog(req, {listUsersResponse: users});
     if(users.length < 1) {
         businessLog(req, "empty user list");
