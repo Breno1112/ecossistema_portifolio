@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { Send } from 'express-serve-static-core';
-import { type } from 'os';
 import { ProgrammaticRequestTraceDTO, RequestTraceDTO } from '../domain/dtos/request_trace.dto';
 
 
@@ -32,6 +31,7 @@ const resDotSendInterceptor = (req: Request, res: Response, send: Send<any, Resp
     clearRequestId(req);
     const routeSteps: RequestTraceDTO = {
         request: {
+            path: req.path,
             headers: req.headers,
             queryparams: req.query,
             params: req.params,
@@ -39,7 +39,8 @@ const resDotSendInterceptor = (req: Request, res: Response, send: Send<any, Resp
         },
         response: {
             headers: res.getHeaders(),
-            body: content
+            body: content,
+            status_code: res.statusCode
         },
         route_steps: programmaticLoggingData.route_steps,
         business_steps: programmaticLoggingData.business_steps
