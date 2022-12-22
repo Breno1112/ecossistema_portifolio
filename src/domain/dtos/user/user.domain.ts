@@ -10,3 +10,8 @@ export type UserListResponse = {
     business_error: string | null;
     route_step_error: any | null;
 }
+
+export type CreateUserResponse = {
+    success: boolean;
+    error: string | undefined;
+}

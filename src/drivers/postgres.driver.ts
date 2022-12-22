@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { UserDTO, UserListResponse } from "../domain/dtos/user/user.domain";
+import { CreateUserResponse, UserDTO, UserListResponse } from "../domain/dtos/user/user.domain";
 
 let pool: Pool | null = null;
 
@@ -15,14 +15,18 @@ async function initPostgressDriver(): Promise<void> {
     });
 }
 
+async function checkConnection(): Promise<void> {
+    if(pool == null) {
+        await initPostgressDriver();
+    }
+}
+
 
 
 export async function postgresListUsers(): Promise<UserListResponse> {
     const response: UserDTO[] = [];
     try {
-        if(pool == null) {
-            await initPostgressDriver();
-        }
+        await checkConnection();
         const result = await pool!.query('SELECT * FROM USUARIO');
         result.rows.forEach((value) => {
             response.push({
@@ -48,4 +52,23 @@ export async function postgresListUsers(): Promise<UserListResponse> {
 
 export function isConnected(): boolean {
     return pool != null;
+}
+
+export async function postgresCreateUser(user: UserDTO): Promise<CreateUserResponse> {
+    const response: CreateUserResponse = {
+        success: false,
+        error: undefined
+    };
+    try {
+        await checkConnection();
+        const queryText: string = "insert into usuario (username, name, last_name, age) values ($1, $2, $3, $4) returning *";
+        const queryParams: string[] = [user.username, user.firstname, user.surename, user.age.toString()];
+        const result = await pool!.query(queryText, queryParams);
+        response.success = true;
+        response.error = undefined;
+    } catch (error) {
+        response.success = false;
+        response.error = `${error}`;
+    }
+    return response;
 }
