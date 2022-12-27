@@ -31,7 +31,7 @@ const resDotSendInterceptor = (req: Request, res: Response, send: Send<any, Resp
     clearRequestId(req);
     const routeSteps: RequestTraceDTO = {
         request: {
-            path: req.path,
+            path: `${req.method} ${req.path}`,
             headers: req.headers,
             queryparams: req.query,
             params: req.params,
