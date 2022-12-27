@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { CreateUserResponse, UserDTO, UserListResponse } from "../domain/dtos/user/user.domain";
+import { CreateUserResponse, DeleteUserResponse, GetUserByIdResponse, UserDTO, UserListResponse } from "../domain/dtos/user/user.domain";
 
 let pool: Pool | null = null;
 
@@ -73,12 +73,16 @@ export async function postgresCreateUser(user: UserDTO): Promise<CreateUserRespo
     return response;
 }
 
-export async function postgresGetUserById(userId: string): Promise<UserDTO | null> {
+export async function postgresGetUserById(userId: string): Promise<GetUserByIdResponse> {
     try {
         await checkConnection();
         const response = await pool!.query("SELECT * FROM USUARIO WHERE ID = $1", [userId]);
         if(response.rowCount < 1) {
-            return null;
+            return {
+                user: null,
+                business_error: "Usuário não encontrado",
+                route_step_error: "User not found"
+            };
         }
         const responseData = response.rows[0];
         const result: UserDTO = {
@@ -91,20 +95,38 @@ export async function postgresGetUserById(userId: string): Promise<UserDTO | nul
         result.firstname = responseData.name;
         result.surename = responseData.last_name;
         result.age = responseData.age;
-        return result;
+        return {
+            user: result,
+            business_error: undefined,
+            route_step_error: undefined
+        };
     } catch (error) {
-        return null;
+        return {
+            user: null,
+            business_error: "Não foi possível encontrar o usuário especificado",
+            route_step_error: JSON.stringify(error)
+        };
     }
 }
 
-export async function postgresDeleteUserById(userId: string): Promise<boolean> {
+export async function postgresDeleteUserById(userId: string): Promise<DeleteUserResponse> {
     try {
         const queryText = "delete from usuario where id = $1";
         const queryParams = [userId];
         await checkConnection();
         await pool!.query(queryText, queryParams);
-        return true;
+        return {
+            userId: userId,
+            deleted: true,
+            business_error: undefined,
+            route_step_error: undefined
+        }
     } catch (error) {
-        return false;
+        return {
+            userId: userId,
+            deleted: false,
+            business_error: `Não foi possível deletar o usuário ${userId}`,
+            route_step_error: JSON.stringify(error)
+        };
     }
 }

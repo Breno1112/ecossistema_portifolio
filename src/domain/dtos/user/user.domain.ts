@@ -16,8 +16,21 @@ export type CreateUserResponse = {
     error: string | undefined;
 }
 
-export type DeleteUserResponse = {
+export type DeleteUserResponseDTO = {
     userId: string,
     deleted: boolean,
     error: string | undefined
+}
+
+export type GetUserByIdResponse = {
+    user: UserDTO | null,
+    business_error: string | undefined,
+    route_step_error: string | undefined
+}
+
+export type DeleteUserResponse = {
+    userId: string,
+    deleted: boolean,
+    business_error: string | undefined,
+    route_step_error: string | undefined
 }
