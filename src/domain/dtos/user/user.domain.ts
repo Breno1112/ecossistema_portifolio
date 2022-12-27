@@ -17,20 +17,26 @@ export type CreateUserResponse = {
 }
 
 export type DeleteUserResponseDTO = {
-    userId: string,
-    deleted: boolean,
-    error: string | undefined
+    userId: string;
+    deleted: boolean;
+    error: string | undefined;
 }
 
 export type GetUserByIdResponse = {
-    user: UserDTO | null,
-    business_error: string | undefined,
-    route_step_error: string | undefined
+    user: UserDTO | null;
+    business_error: string | undefined;
+    route_step_error: string | undefined;
 }
 
 export type DeleteUserResponse = {
-    userId: string,
-    deleted: boolean,
-    business_error: string | undefined,
-    route_step_error: string | undefined
+    userId: string;
+    deleted: boolean;
+    business_error: string | undefined;
+    route_step_error: string | undefined;
+}
+
+export type UserEntity = { username: string;
+    name: string;
+    last_name: string;
+    age: number;
 }

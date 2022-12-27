@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { CreateUserResponse, DeleteUserResponse, GetUserByIdResponse, UserDTO, UserListResponse } from "../domain/dtos/user/user.domain";
+import { CreateUserResponse, DeleteUserResponse, GetUserByIdResponse, UserDTO, UserEntity, UserListResponse } from "../domain/dtos/user/user.domain";
 
 let pool: Pool | null = null;
 
@@ -28,7 +28,7 @@ export async function postgresListUsers(): Promise<UserListResponse> {
     try {
         await checkConnection();
         const result = await pool!.query('SELECT * FROM USUARIO');
-        result.rows.forEach((value) => {
+        result.rows.forEach((value: UserEntity) => {
             response.push({
                 username: value.username,
                 firstname: value.name,
