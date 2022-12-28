@@ -1,5 +1,5 @@
 import { NextFunction, Router, Request, Response } from "express";
-import { generateKeysForLogin } from "../services/auth.service";
+import { generateKeysForLogin, generateToken } from "../services/auth.service";
 
 const authController = Router();
 
@@ -12,6 +12,11 @@ authController.get('/key/generate', async (req: Request, res: Response, next: Ne
     } else {
         res.status(200).send(response);
     }
+});
+
+authController.post('/auth/token', async (req: Request, res: Response, next: NextFunction) => {
+    await generateToken(req.body);
+    res.status(200).send({});
 });
 
 export default authController;

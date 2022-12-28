@@ -1,3 +1,4 @@
+import { GenerateTokenRequestDTO } from "../domain/dtos/auth.domain";
 import { KeyPairGenerationDTO } from "../domain/dtos/encryption.domain";
 import { cacheInsert } from "./cache.service";
 import { generatKeys } from "./encryption.service";
@@ -18,4 +19,8 @@ export async function generateKeysForLogin(): Promise<KeyPairGenerationDTO> {
             error: "Não foi possível gerar as chaves de criptografia no momento"
         };
     }
+}
+
+export async function generateToken(body: GenerateTokenRequestDTO): Promise<void> {
+    
 }
