@@ -6,7 +6,12 @@ const authController = Router();
 
 
 authController.get('/key/generate', async (req: Request, res: Response, next: NextFunction) => {
-    res.status(200).send(await generateKeysForLogin());
+    const response = await generateKeysForLogin();
+    if(response.error != undefined) {
+        res.status(500).send(response);
+    } else {
+        res.status(200).send(response);
+    }
 });
 
 export default authController;

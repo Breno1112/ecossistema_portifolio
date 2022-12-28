@@ -5,7 +5,7 @@ export type GeneratedKeyPair = {
 }
 
 export type KeyPairGenerationDTO = {
-    public_key: string;
-    id: string;
+    public_key: string | undefined;
+    id: string | undefined;
     error: string | undefined
 }

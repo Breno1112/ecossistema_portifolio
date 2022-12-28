@@ -15,7 +15,7 @@ function getSelectedCacheServer(): CacheEnum {
 export async function cacheInsert(data: any): Promise<CacheInsertResponse> {
     switch(getSelectedCacheServer()) {
         case CacheEnum.REDIS:
-            return redisInsert(data)
+            return await redisInsert(data)
         default:
             return {
                 id:'',
