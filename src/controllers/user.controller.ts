@@ -1,12 +1,12 @@
 import { NextFunction, Router, Request, Response } from "express";
-import { DeleteUserResponse, UserDTO } from "../domain/dtos/user/user.domain";
+import { DeleteUserResponseDTO, UserDTO } from "../domain/dtos/user/user.domain";
 import { businessLog, routeStepLog } from "../services/logger.service";
 import { createUser, deleteUser, listUsers } from "../services/user.service";
 
 const userController = Router();
 
 userController.get('/users', async (req: Request, res: Response, next: NextFunction) => {
-    businessLog(req, "calling user servie to list users");
+    businessLog(req, "calling user service to list users");
     const users = await listUsers(req);
     routeStepLog(req, {listUsersResponse: users});
     if(users.length < 1) {
@@ -55,7 +55,7 @@ userController.delete('/users/:userId', async (req: Request, res: Response, next
         return;
     }
     if(userId != null) {
-        const deleteUserResponse: DeleteUserResponse = await deleteUser(req, userId);
+        const deleteUserResponse: DeleteUserResponseDTO = await deleteUser(req, userId);
         if(!deleteUserResponse.deleted) {
             res.status(500).send(deleteUserResponse);
             businessLog(req, {business_error: {error: deleteUserResponse.error}});
