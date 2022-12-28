@@ -1,6 +1,6 @@
-import { CacheInsertResponse } from "../domain/dtos/cache.domain";
+import { CacheGetResponse, CacheInsertResponse } from "../domain/dtos/cache.domain";
 import { CacheEnum } from "../domain/enums/cache.enum";
-import { redisInsert } from "../drivers/redis.driver";
+import { redisGet, redisInsert } from "../drivers/redis.driver";
 
 
 function getSelectedCacheServer(): CacheEnum {
@@ -21,6 +21,20 @@ export async function cacheInsert(data: any): Promise<CacheInsertResponse> {
                 id:'',
                 success: false,
                 data: null
+            }
+    }
+}
+
+export async function cacheGet(key: string): Promise<CacheGetResponse> {
+    switch(getSelectedCacheServer()) {
+        case CacheEnum.REDIS:
+            return await redisGet(key);
+        default:
+            return {
+                success: false,
+                data: undefined,
+                business_error: `Não foi possível buscar a chave ${key} no cache`,
+                route_step_error: 'no cache server selected'
             }
     }
 }

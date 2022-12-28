@@ -1,7 +1,7 @@
 import { RedisClientType } from "@redis/client";
 import { createClient } from "redis";
 import { generateRandomString } from "../services/utils.service";
-import { CacheInsertResponse } from "../domain/dtos/cache.domain";
+import { CacheGetResponse, CacheInsertResponse } from "../domain/dtos/cache.domain";
 
 let client: RedisClientType<any> | undefined;
 
@@ -39,6 +39,28 @@ export async function redisInsert(data: object): Promise<CacheInsertResponse> {
             id: '',
             success: false,
             data: null
+        }
+    }
+}
+
+export async function redisGet(key: string): Promise<CacheGetResponse> {
+    try {
+        if(!connected()) {
+            createConnection();
+        }
+        const getResponse = await client!!.get(key);
+        return {
+            success: true,
+            data: getResponse != null ? JSON.parse(getResponse) : getResponse,
+            business_error: undefined,
+            route_step_error: undefined
+        }
+    } catch(error) {
+        return {
+            success: false,
+            data: undefined,
+            business_error: `Não foi possível buscar a chave ${key} no cache`,
+            route_step_error: `${error}`
         }
     }
 }

@@ -1,6 +1,6 @@
 import { GenerateTokenRequestDTO } from "../domain/dtos/auth.domain";
 import { KeyPairGenerationDTO } from "../domain/dtos/encryption.domain";
-import { cacheInsert } from "./cache.service";
+import { cacheGet, cacheInsert } from "./cache.service";
 import { generatKeys } from "./encryption.service";
 
 export async function generateKeysForLogin(): Promise<KeyPairGenerationDTO> {
@@ -22,5 +22,6 @@ export async function generateKeysForLogin(): Promise<KeyPairGenerationDTO> {
 }
 
 export async function generateToken(body: GenerateTokenRequestDTO): Promise<void> {
-    
+    const responseGot = await cacheGet(body.key_id);
+    console.log(responseGot);
 }
