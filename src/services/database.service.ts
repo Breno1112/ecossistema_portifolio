@@ -1,4 +1,4 @@
-import { CreateUserResponse, DeleteUserResponse, GetUserByIdResponse, UserDTO, UserListResponse } from "../domain/dtos/user/user.domain";
+import { CreateUserResponse, DeleteUserResponse, GetUserByIdResponse, UserDTO, UserListResponse } from "../domain/dtos/user.domain";
 import { DatabaseEnum } from "../domain/enums/database.enum";
 import { postgresCreateUser, postgresDeleteUserById, postgresGetUserById, postgresListUsers } from "../drivers/postgres.driver";
 

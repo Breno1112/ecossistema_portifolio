@@ -20,9 +20,11 @@
   "dependencies": {
     "@types/crypto-js": "^4.1.1",
     "@types/jsonwebtoken": "^9.0.0",
+    "@types/redis": "^4.0.11",
     "crypto-js": "^4.1.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
-    "pg": "^8.8.0"
+    "pg": "^8.8.0",
+    "redis": "^4.5.1"
   }
 }

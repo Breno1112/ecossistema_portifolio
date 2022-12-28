@@ -1,4 +1,4 @@
-import { KeyPairGenerationDTO } from "../domain/dtos/encryption/encryption.domain";
+import { KeyPairGenerationDTO } from "../domain/dtos/encryption.domain";
 import { generatKeys } from "./encryption.service";
 
 export async function generateKeysForLogin(): Promise<KeyPairGenerationDTO> {

@@ -1,5 +1,5 @@
 import { NextFunction, Router, Request, Response } from "express";
-import { DeleteUserResponseDTO, UserDTO } from "../domain/dtos/user/user.domain";
+import { DeleteUserResponseDTO, UserDTO } from "../domain/dtos/user.domain";
 import { businessLog, routeStepLog } from "../services/logger.service";
 import { createUser, deleteUser, listUsers } from "../services/user.service";
 

@@ -1,4 +1,4 @@
-import { CreateUserResponse, DeleteUserResponse, DeleteUserResponseDTO, UserDTO } from "../domain/dtos/user/user.domain";
+import { CreateUserResponse, DeleteUserResponse, DeleteUserResponseDTO, UserDTO } from "../domain/dtos/user.domain";
 import { postgresCreateUser, postgresDeleteUserById, postgresGetUserById, postgresListUsers } from "../drivers/postgres.driver";
 import { Request } from 'express';
 import { businessLog, routeStepLog } from "./logger.service";

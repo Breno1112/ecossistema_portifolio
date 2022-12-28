@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { CreateUserResponse, DeleteUserResponse, GetUserByIdResponse, UserDTO, UserEntity, UserListResponse } from "../domain/dtos/user/user.domain";
+import { CreateUserResponse, DeleteUserResponse, GetUserByIdResponse, UserDTO, UserEntity, UserListResponse } from "../domain/dtos/user.domain";
 
 let pool: Pool | null = null;
 

@@ -1,5 +1,6 @@
 import { generateKeyPairSync } from "crypto";
-import { GeneratedKeyPair } from "../domain/dtos/encryption/encryption.domain";
+import { GeneratedKeyPair } from "../domain/dtos/encryption.domain";
+import { generateRandomString } from "./utils.service";
 
 
 export function generatKeys(): GeneratedKeyPair {
@@ -22,15 +23,4 @@ export function generatKeys(): GeneratedKeyPair {
         public_key: key.publicKey.toString('base64'),
         private_key: key.privateKey.toString('base64')
      }
-}
-
-
-function generateRandomString(length: number) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
 }
